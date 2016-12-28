@@ -1,5 +1,6 @@
 package com.applek.happy.ui;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -113,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
                 finish();
                 break;
             case R.id.show:
-                ShowWidget showWidget = new ShowWidget();
-                showWidget.onEnabled(this);
+                Intent intent = new Intent(this,AddWidgetActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
