@@ -7,18 +7,19 @@
         android:background="@mipmap/bg">
 
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swiper"
+            android:id="@+id/image_swiper"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/main_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@mipmap/bg">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/image_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alwaysDrawnWithCache="false"
+                android:background="@mipmap/bg">
 
-                </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 </layout>

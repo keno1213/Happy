@@ -2,29 +2,27 @@ package com.applek.happy.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.applek.happy.R;
 import com.applek.happy.bean.HappyData;
-import com.applek.happy.databinding.ItemListBinding;
+import com.applek.happy.databinding.ItemListImageBinding;
 
 import java.util.List;
 
 /**
- * Created by wang_gp on 2016/12/28.
+ * Created by wang_gp on 2016/12/29.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_VIEW = 1;
     private static final int FOOT_VIEW = 2;
     private List<HappyData.HappyDatas> datas;
 
-    public MyAdapter(List<HappyData.HappyDatas> datas) {
+    public ImageAdapter(List<HappyData.HappyDatas> datas) {
         this.datas = datas;
-        Log.e("Tag", "------" + datas.size());
     }
 
     public void addData(List<HappyData.HappyDatas> datas) {
@@ -52,7 +50,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_VIEW) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list, parent, false);
+                    .inflate(R.layout.item_list_image, parent, false);
             return new MyViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_view, parent,
@@ -70,7 +68,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        MyViewHolder holder1 = null;
+    MyViewHolder holder1 = null;
         if(holder instanceof MyViewHolder){
             holder1 = (MyViewHolder) holder;
             holder1.bind(datas.get(position));
@@ -88,7 +86,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        private ItemListBinding bind;
+        private ItemListImageBinding bind;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -96,7 +94,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(HappyData.HappyDatas data) {
-            bind.setHappy(data);
+            bind.setData(data);
         }
 
 

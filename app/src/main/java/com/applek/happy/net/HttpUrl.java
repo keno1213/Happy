@@ -17,7 +17,7 @@ public class HttpUrl {
      * key	string	是	您申请的key
      */
     public static String getNewestURL_Search(int page, String time) {
-        return BASE_URL + "/content/list.from" + "?key=" + APP_KEY + "&page=" + page + "&pagesize=10&sort=desc&time=" + time;
+        return BASE_URL + "/content/list.from" + "?key=" + APP_KEY + "&page=" + page + "&pagesize=20&sort=desc&time=" + time;
     }
 
     /**
@@ -25,13 +25,13 @@ public class HttpUrl {
      */
 
     public static String getNewsURL(int page) {
-        return BASE_URL + "/content/text.from?key=" + APP_KEY + "&page=" + page + "&pagesize=10";
+        return BASE_URL + "/content/text.from?key=" + APP_KEY + "&page=" + page + "&pagesize=20";
     }
 
     /**
      * http://japi.juhe.cn/joke/img/text.from?key=您申请的KEY&page=1&pagesize=10
      * */
     public static String getNewsImageURL(int page) {
-        return BASE_URL + "/img/text.from?key=" + APP_KEY + "&page=" + page + "&pagesize=10";
+        return BASE_URL + "/img/text.from?key=" + APP_KEY + "&page=" + page + "&pagesize=20";
     }
 }

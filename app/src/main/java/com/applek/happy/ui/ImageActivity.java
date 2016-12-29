@@ -1,11 +1,10 @@
 package com.applek.happy.ui;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,64 +12,40 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.applek.happy.R;
-import com.applek.happy.adapter.MyAdapter;
+import com.applek.happy.adapter.ImageAdapter;
 import com.applek.happy.bean.HappyData;
-import com.applek.happy.databinding.ActivityMainBinding;
+import com.applek.happy.databinding.ImageLayoutBinding;
 import com.applek.happy.net.HttpUrl;
 import com.applek.happy.utils.NetUtil;
 import com.google.gson.Gson;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBack, SwipeRefreshLayout.OnRefreshListener {
+/**
+ * Created by wang_gp on 2016/12/29.
+ */
 
-    private ActivityMainBinding binding;
-    private int page = 1;
-    private MyAdapter myAdapter;
-    private View headerView;
-    private View footerView;
+public class ImageActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NetUtil.OkCallBack {
+
+    private ImageLayoutBinding bind;
+    private int page =1;
     private LinearLayoutManager layoutManager;
+    private ImageAdapter myAdapter;
     private boolean isLoading;
-    private Handler handler = new Handler();
+private Handler handler = new Handler();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-//        binding.mainList.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        binding.mainList.setLayoutManager(layoutManager);
-        ActionBar bar = getSupportActionBar();
-        bar.setHomeButtonEnabled(true);
-        bar.setDisplayHomeAsUpEnabled(true);
-       /* // 头部
-        headerView = LayoutInflater.from(this).inflate(R.layout.header_view, null);
-// 脚部
-        footerView = LayoutInflater.from(this).inflate(R.layout.footer_view, null);
-        binding.mainList.addHeaderView(headerView);
-        binding.mainList.setScaleRatio(2.0f);
-        binding.mainList.addFootView(footerView);
-        binding.mainList.setLoadDataListener(new AnimRFRecyclerView.LoadDataListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                initData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                page++;
-                initData();
-            }
-        });*/
-        binding.swiper.setColorSchemeColors(getResources().getColor(R.color.blueStatus));
-        binding.swiper.setOnRefreshListener(this);
-        binding.swiper.setRefreshing(true);
-        binding.mainList.setItemAnimator(new DefaultItemAnimator());
-        binding.mainList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        bind = DataBindingUtil.setContentView(this, R.layout.image_layout);
+        bind.imageSwiper.setColorSchemeColors(getResources().getColor(R.color.blueStatus));
+        bind.imageSwiper.setOnRefreshListener(this);
+        bind.imageSwiper.setRefreshing(true);
+        layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        bind.imageList.setLayoutManager(layoutManager);
+        bind.imageList.setItemAnimator(new DefaultItemAnimator());
+        bind.imageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -84,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
 
                 int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == myAdapter.getItemCount()) {
-                    boolean isRefreshing = binding.swiper.isRefreshing();
+                    boolean isRefreshing = bind.imageSwiper.isRefreshing();
                     if (isRefreshing) {
                         myAdapter.notifyItemRemoved(myAdapter.getItemCount());
                         return;
@@ -107,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
     }
 
     private void initData() {
-        NetUtil.getInstance().sendGet(this, HttpUrl.getNewsURL(page), this);
+        NetUtil.getInstance().sendGet(this, HttpUrl.getNewsImageURL(page), this);
     }
 
     @Override
@@ -125,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
             return;
         }
         if(myAdapter == null){
-            myAdapter = new MyAdapter(data);
-            binding.mainList.setAdapter(myAdapter);
+            myAdapter = new ImageAdapter(data);
+            bind.imageList.setAdapter(myAdapter);
         }else{
-            if(binding.mainList.getAdapter() == null){
-                binding.mainList.setAdapter(myAdapter);
+            if( bind.imageList.getAdapter() == null){
+                bind.imageList.setAdapter(myAdapter);
             }else{
                 if(page != 1){
                     myAdapter.addData(data);
@@ -139,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
             }
         }
 
-        binding.swiper.setRefreshing(false);
+        bind.imageSwiper.setRefreshing(false);
     }
 
     @Override
@@ -154,19 +129,6 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.show:
-                Intent intent = new Intent(this,ImageActivity.class);
-                startActivity(intent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onRefresh() {

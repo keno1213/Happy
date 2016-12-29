@@ -10,6 +10,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.applek.happy.utils.MyGlideModule"
+            android:value="GlideModule" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +31,7 @@
                 android:resource="@xml/show_widget_info" />
         </receiver>
 <activity android:name=".ui.AddWidgetActivity"/>
+        <activity android:name=".ui.ImageActivity" />
     </application>
 
 </manifest>
