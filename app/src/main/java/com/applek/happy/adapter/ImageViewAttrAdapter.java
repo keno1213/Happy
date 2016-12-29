@@ -15,8 +15,9 @@ public class ImageViewAttrAdapter {
     public static void imageLoader(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
-                .error(R.mipmap.bg)
-                .fitCenter()
+                .error(R.mipmap.action_bg)
+                .placeholder(R.mipmap.action_bg)
+                .centerCrop()
                 .dontAnimate()
                 .into(imageView);
     }

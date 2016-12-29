@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
         ActionBar bar = getSupportActionBar();
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("开心一笑");
        /* // 头部
         headerView = LayoutInflater.from(this).inflate(R.layout.header_view, null);
 // 脚部

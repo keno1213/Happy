@@ -5,10 +5,10 @@
     <item
         android:id="@+id/delete1"
         android:showAsAction="always"
-        android:title="拍照"/>
+        android:title="空操作"/>
     <item
         android:id="@+id/show"
         android:showAsAction="ifRoom"
-        android:title="展示">
+        android:title="趣图">
     </item>
 </menu>

@@ -3,9 +3,19 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <!--Dialog 的进入动画和退出动画-->
+    <style name="Dialog_Anima">
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+    </style>
+    <style name="Full_Screen" parent="android:Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0.1</item>
+    </style>
 </resources>

@@ -1,5 +1,6 @@
 package com.applek.happy.adapter;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.applek.happy.R;
 import com.applek.happy.bean.HappyData;
 import com.applek.happy.databinding.ItemListImageBinding;
+import com.applek.happy.widget.ImageDialog;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_VIEW = 1;
     private static final int FOOT_VIEW = 2;
     private List<HappyData.HappyDatas> datas;
-
+private Context context;
     public ImageAdapter(List<HappyData.HappyDatas> datas) {
         this.datas = datas;
     }
@@ -47,10 +49,12 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+        context = parent.getContext();
         if (viewType == TYPE_VIEW) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_list_image, parent, false);
+
             return new MyViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_view, parent,
@@ -67,11 +71,18 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
     MyViewHolder holder1 = null;
         if(holder instanceof MyViewHolder){
             holder1 = (MyViewHolder) holder;
             holder1.bind(datas.get(position));
+            holder1.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageDialog dialog = new ImageDialog(context,R.style.Full_Screen,datas.get(position));
+                    dialog.show();
+                }
+            });
         }
     }
 
@@ -90,6 +101,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
             bind = DataBindingUtil.bind(itemView);
         }
 
