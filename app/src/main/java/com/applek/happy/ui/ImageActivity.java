@@ -10,8 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 
 import com.applek.happy.R;
 import com.applek.happy.adapter.ImageAdapter;
@@ -120,13 +118,6 @@ private Handler handler = new Handler();
     @Override
     public void onFaile(Exception exception) {
         Log.e("Tag", "--------" + exception.getMessage());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 
