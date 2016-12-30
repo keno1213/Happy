@@ -165,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
                 Intent intent = new Intent(this,ImageActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.delete1:
+
         }
         return super.onOptionsItemSelected(item);
     }
