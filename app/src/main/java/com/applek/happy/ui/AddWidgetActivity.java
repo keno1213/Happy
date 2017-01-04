@@ -6,7 +6,6 @@ package com.applek.happy.ui;
  * Created by appleking on 2016/12/28.
  */
 
-import static android.util.Log.d;
 import android.app.Activity;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
@@ -17,6 +16,8 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+
+import static android.util.Log.d;
 
 /**
  * 在activity中，长按，弹出widget选择界面，
@@ -35,7 +36,6 @@ public class AddWidgetActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mAppWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         mAppWidgetHost = new AppWidgetHost(getApplicationContext(), APPWIDGET_HOST_ID);
         //开始监听widget的变化

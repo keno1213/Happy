@@ -1,32 +1,24 @@
 package com.applek.happy.ui;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
+import com.applek.happy.Base.BaseFragment;
 import com.applek.happy.R;
 import com.applek.happy.adapter.MyAdapter;
-import com.applek.happy.bean.HappyData;
 import com.applek.happy.databinding.ActivityMainBinding;
-import com.applek.happy.net.HttpUrl;
-import com.applek.happy.utils.NetUtil;
-import com.google.gson.Gson;
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBack, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ActivityMainBinding binding;
     private int page = 1;
@@ -36,13 +28,21 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
     private LinearLayoutManager layoutManager;
     private boolean isLoading;
     private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        String[] str = new String[]{"段子", "趣图", "其他"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, str);
+        binding.idLv.setAdapter(adapter);
+        binding.idLv.setOnItemClickListener(this);
+
+        initFragment();
 //        binding.mainList.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        binding.mainList.setLayoutManager(layoutManager);
+/*        layoutManager = new LinearLayoutManager(this);
+        binding.mainList.setLayoutManager(layoutManager);*/
         ActionBar bar = getSupportActionBar();
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
                 initData();
             }
         });*/
-        binding.swiper.setColorSchemeColors(getResources().getColor(R.color.blueStatus));
+    /*    binding.swiper.setColorSchemeColors(getResources().getColor(R.color.blueStatus));
         binding.swiper.setOnRefreshListener(this);
         binding.swiper.setRefreshing(true);
         binding.mainList.setItemAnimator(new DefaultItemAnimator());
@@ -103,83 +103,108 @@ public class MainActivity extends AppCompatActivity implements NetUtil.OkCallBac
                     }
                 }
             }
-        });
-        initData();
+        });*/
+//        initData();
     }
 
-    private void initData() {
-        NetUtil.getInstance().sendGet(this, HttpUrl.getNewsURL(page), this);
+    private void initFragment() {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, new TextFragment()).commit();
     }
 
     @Override
-    public void onSucess(String result) {
-        Gson gson = new Gson();
-        Log.e("Tag", "--------" + result);
-        HappyData happyData = gson.fromJson(result, HappyData.class);
-        setData(happyData.result.data);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 1:
+                ImageFragment imageFragment = new ImageFragment();
+                switchContent(imageFragment);
+                break;
+            case 0:
+                switchContent(new TextFragment());
+                break;
+        }
+        binding.drawerLayout.closeDrawer(binding.idDrawer);
     }
 
-    private void setData(List<HappyData.HappyDatas> data) {
-        isLoading = false;
+    private void switchContent(BaseFragment imageFragment) {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = supportFragmentManager.beginTransaction();
+        transaction.replace(R.id.main_container,imageFragment).commit();
+    }
 
-        if(data == null || data.size() == 0){
-            return;
+    /*    private void initData() {
+            NetUtil.getInstance().sendGet(this, HttpUrl.getNewsURL(page), this);
         }
-        if(myAdapter == null){
-            myAdapter = new MyAdapter(data);
-            binding.mainList.setAdapter(myAdapter);
-        }else{
-            if(binding.mainList.getAdapter() == null){
+
+        @Override
+        public void onSucess(String result) {
+            Gson gson = new Gson();
+            Log.e("Tag", "--------" + result);
+            HappyData happyData = gson.fromJson(result, HappyData.class);
+            setData(happyData.result.data);
+        }
+
+        private void setData(List<HappyData.HappyDatas> data) {
+            isLoading = false;
+
+            if(data == null || data.size() == 0){
+                return;
+            }
+            if(myAdapter == null){
+                myAdapter = new MyAdapter(data);
                 binding.mainList.setAdapter(myAdapter);
             }else{
-                if(page != 1){
-                    myAdapter.addData(data);
-                }else {
-                    myAdapter.clearData(data);
+                if(binding.mainList.getAdapter() == null){
+                    binding.mainList.setAdapter(myAdapter);
+                }else{
+                    if(page != 1){
+                        myAdapter.addData(data);
+                    }else {
+                        myAdapter.clearData(data);
+                    }
                 }
             }
+
+            binding.swiper.setRefreshing(false);
         }
 
-        binding.swiper.setRefreshing(false);
-    }
+        @Override
+        public void onFaile(Exception exception) {
+            Log.e("Tag", "--------" + exception.getMessage());
+        }
 
-    @Override
-    public void onFaile(Exception exception) {
-        Log.e("Tag", "--------" + exception.getMessage());
-    }
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.actionbar_menu, menu);
+            return super.onCreateOptionsMenu(menu);
+        }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
+
+        @Override
+        public void onRefresh() {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    page = 1;
+                    initData();
+                }
+            },2000);
+
+        }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if(binding.drawerLayout.isDrawerOpen(binding.idDrawer)){
+                    binding.drawerLayout.closeDrawer(binding.idDrawer);
+                }else{
+                    binding.drawerLayout.openDrawer(binding.idDrawer);
+                }
                 break;
-            case R.id.show:
-                Intent intent = new Intent(this,ImageActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.delete1:
-
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                page = 1;
-                initData();
-            }
-        },2000);
-
     }
 }
