@@ -11,7 +11,9 @@ import com.applek.happy.R;
 import com.applek.happy.bean.HappyData;
 import com.applek.happy.databinding.ItemListBinding;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wang_gp on 2016/12/28.
@@ -21,6 +23,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_VIEW = 1;
     private static final int FOOT_VIEW = 2;
     private List<HappyData.HappyDatas> datas;
+    private Map<Integer, Integer> heights = new HashMap<>();
 
     public MyAdapter(List<HappyData.HappyDatas> datas) {
         this.datas = datas;
@@ -61,7 +64,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class FootViewHolder extends RecyclerView.ViewHolder{
+    public class FootViewHolder extends RecyclerView.ViewHolder {
 
         public FootViewHolder(View itemView) {
             super(itemView);
@@ -71,9 +74,20 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MyViewHolder holder1 = null;
-        if(holder instanceof MyViewHolder){
+
+        if (holder instanceof MyViewHolder) {
             holder1 = (MyViewHolder) holder;
             holder1.bind(datas.get(position));
+            /*Integer integer = heights.get(position);
+            if(integer != null){
+                ViewGroup.LayoutParams layoutParams = holder1.bind.itemLl.getLayoutParams();
+                layoutParams.height = integer;
+                holder1.bind.itemLl.setLayoutParams(layoutParams);
+            }else{
+                holder1.bind.itemLl.measure(0,0);
+                int measuredHeight = holder1.bind.itemLl.getMeasuredHeight();
+                heights.put(position,measuredHeight);
+            }*/
         }
     }
 
@@ -88,7 +102,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        private ItemListBinding bind;
+        public ItemListBinding bind;
 
         public MyViewHolder(View itemView) {
             super(itemView);

@@ -1,6 +1,5 @@
 package com.applek.happy.Base;
 
-import android.content.Context;
 import android.view.View;
 
 
@@ -27,10 +26,9 @@ import android.view.View;
 public abstract class BaseHolder<T> {
 
     public View rootView;
-    private final Context mContext;
 
-    public BaseHolder(Context context ,View rootView) {
-        mContext = context;
+
+    public BaseHolder(View rootView) {
         rootView.setTag(this);
     }
 

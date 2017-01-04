@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,9 @@ import com.applek.happy.adapter.MyAdapter;
 import com.applek.happy.bean.HappyData;
 import com.applek.happy.databinding.TextLayoutBinding;
 import com.applek.happy.net.HttpUrl;
+import com.applek.happy.utils.LogUtil;
 import com.applek.happy.utils.NetUtil;
+import com.applek.happy.widget.FullyLinearLayoutManager;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, NetUtil.OkCallBack {
 
     private TextLayoutBinding binding;
-    private LinearLayoutManager layoutManager;
+    private FullyLinearLayoutManager layoutManager;
     private int page = 1;
     private MyAdapter myAdapter;
     private boolean isLoading;
@@ -36,13 +37,14 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void initView(View rootView) {
         binding = DataBindingUtil.bind(rootView);
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new FullyLinearLayoutManager(getContext());
         binding.mainList.setLayoutManager(layoutManager);
         binding.swiper.setColorSchemeColors(getResources().getColor(R.color.blueStatus));
         binding.swiper.setOnRefreshListener(this);
         binding.swiper.setRefreshing(true);
         binding.mainList.setItemAnimator(new DefaultItemAnimator());
         binding.mainList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -53,9 +55,9 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.d("test", "onScrolled");
-
                 int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == myAdapter.getItemCount()) {
+                    LogUtil.e("Tag", "-------" + lastVisibleItemPosition + "****************************");
                     boolean isRefreshing = binding.swiper.isRefreshing();
                     if (isRefreshing) {
                         myAdapter.notifyItemRemoved(myAdapter.getItemCount());
@@ -69,12 +71,13 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                 page++;
                                 initData();
                             }
-                        },2000);
+                        }, 2000);
 
                     }
                 }
             }
         });
+        initData();
     }
 
     @Override
@@ -104,19 +107,19 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void setData(List<HappyData.HappyDatas> data) {
         isLoading = false;
 
-        if(data == null || data.size() == 0){
+        if (data == null || data.size() == 0) {
             return;
         }
-        if(myAdapter == null){
+        if (myAdapter == null) {
             myAdapter = new MyAdapter(data);
             binding.mainList.setAdapter(myAdapter);
-        }else{
-            if(binding.mainList.getAdapter() == null){
+        } else {
+            if (binding.mainList.getAdapter() == null) {
                 binding.mainList.setAdapter(myAdapter);
-            }else{
-                if(page != 1){
+            } else {
+                if (page != 1) {
                     myAdapter.addData(data);
-                }else {
+                } else {
                     myAdapter.clearData(data);
                 }
             }
@@ -124,6 +127,7 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
         binding.swiper.setRefreshing(false);
     }
+
     @Override
     public void onRefresh() {
         handler.postDelayed(new Runnable() {
@@ -132,7 +136,7 @@ public class TextFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 page = 1;
                 initData();
             }
-        },2000);
+        }, 2000);
 
     }
 }

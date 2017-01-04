@@ -33,17 +33,17 @@
         <!--抽屉-->
         <LinearLayout
             android:id="@+id/id_drawer"
-            android:layout_width="240dp"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="#E0EEE0"
+            android:background="@mipmap/bg"
             android:orientation="vertical" >
             <ListView
                 android:id="@+id/id_lv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:divider="#CD853F"
-                android:dividerHeight="2dp" >
+                android:divider="#fff"
+                android:dividerHeight="1dp" >
             </ListView>
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>

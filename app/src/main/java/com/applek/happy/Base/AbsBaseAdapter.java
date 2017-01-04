@@ -101,4 +101,8 @@ public abstract class AbsBaseAdapter<T> extends BaseAdapter {
      * @return A new ViewHolder that holds a View of the given view type.
      */
     protected abstract BaseHolder onCreateViewHolder(ViewGroup parent, int viewType);
+
+    public abstract void addData(List<T> data);
+
+    public abstract void clearData(List<T> data);
 }
